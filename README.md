@@ -85,119 +85,123 @@ Assets/
 
 ## Movement Patterns
 
-All movement patterns implement the `IMovementPattern` interface, which defines two key methods for calculating movement and optional editor visualization.
+All movement patterns implement the `IMovementPattern` interface, which defines two key methods for calculating movement and optional editor visualization. Each pattern has specific parameters that control its behavior, with many parameters being randomized within defined ranges when the pattern is first used.
 
-### Movement Pattern Parameters and Randomization
-
-Each pattern has specific parameters that control its behavior. Many parameters are randomized within defined ranges when the pattern is first used. Here's a detailed breakdown of each pattern:
+### Pattern Details
 
 #### 1. Linear Movement
-- **Parameters**:
-  - `speedMultiplier` (1.0 by default): Multiplies the base movement speed
-- **Randomization**: None
 - **Behavior**: Moves in a straight horizontal line at constant speed
+- **Parameters**:
+  - `speedMultiplier` (1.0): Multiplies the base movement speed
+- **Performance**: 
+  - Lightweight with minimal calculations
+  - No randomization or state tracking needed
 
 #### 2. Vertical Movement
+- **Behavior**: Moves up and down in a sine wave pattern while moving horizontally
 - **Parameters**:
-  - `height` (2.0f): Maximum vertical movement range
-  - `speed` (1.5f): Speed of vertical oscillation
-  - `startMovingUp` (random): Initial direction of movement
-- **Randomization on first use**:
-  - `height`: Random between 1.5 and 2.5
-  - `speed`: Random between 1.0 and 2.0
-  - `startMovingUp`: Randomly true or false
-  - `timeOffset`: Random phase offset for the movement
+  - `height` (2.0f): Vertical movement range (random 1.5-2.5)
+  - `speed` (1.5f): Oscillation speed (random 1.0-2.0)
+  - `startMovingUp` (random): Initial direction (random true/false)
+- **Randomization**:
+  - All parameters randomized on first use
+  - `timeOffset` ensures unique movement patterns
+- **Performance**:
+  - Uses efficient sine calculations
+  - Single randomization at initialization
 
 #### 3. Sine Wave Movement
+- **Behavior**: Smooth wave-like motion along both axes
 - **Parameters**:
-  - `minAmplitude`/`maxAmplitude` (0.5f/2.5f): Wave height range
-  - `minFrequency`/`maxFrequency` (0.5f/2.0f): Oscillation speed range
-  - `minSpeed`/`maxSpeed` (0.8f/2.0f): Horizontal speed range
-- **Randomization on first use**:
-  - `amplitude`: Random between minAmplitude and maxAmplitude
-  - `frequency`: Random between minFrequency and maxFrequency
-  - `speed`: Random between minSpeed and maxSpeed
-  - `timeOffset`: Random phase offset
+  - `amplitude` (0.5-2.5): Wave height (randomized)
+  - `frequency` (0.5-2.0): Oscillations per second (randomized)
+  - `speed` (0.8-2.0): Horizontal movement speed (randomized)
+- **Randomization**:
+  - All ranges randomized within min/max bounds
+  - Unique `timeOffset` for each instance
+- **Performance**:
+  - Single sine calculation per frame
+  - Values cached after initialization
 
 #### 4. Hover Movement
+- **Behavior**: Moves horizontally with periodic pauses
 - **Parameters**:
-  - `hoverSpacing` (8.0f): Distance between hover points
-  - `hoverDuration` (0.5f): Time spent at each hover point
-  - `moveSpeedMultiplier` (2.5f): Speed when moving between points
-  - `verticalHover` (true): If true, adds vertical movement while hovering
-  - `hoverHeight` (0.3f): Height of vertical hover movement
-- **Randomization**: None
-- **Behavior**: Moves horizontally, pausing at regular intervals
+  - `hoverSpacing` (8.0f): Distance between hovers
+  - `hoverDuration` (0.5f): Pause duration
+  - `moveSpeedMultiplier` (2.5f): Movement speed
+  - `verticalHover` (true): Enable vertical movement
+  - `hoverHeight` (0.3f): Vertical movement range
+- **Performance**:
+  - Simple state machine for hover/move states
+  - No per-frame calculations when hovering
 
 #### 5. Figure Eight Movement
+- **Behavior**: Smooth infinity (∞) shaped path
 - **Parameters**:
-  - `width` (3.0f): Base width of the figure-eight
-  - `widthVariation` (1.0f): Random variation in width
-  - `height` (2.0f): Base height of the figure-eight
-  - `heightVariation` (0.5f): Random variation in height
-  - `speed` (1.0f): Base movement speed
-  - `speedVariation` (0.3f): Random speed variation
-  - `randomizeDirection` (true): If true, direction is random
-- **Randomization on first use**:
-  - `randomWidth`: width ± widthVariation
-  - `randomHeight`: height ± heightVariation
-  - `randomSpeedMultiplier`: 1.0 ± speedVariation
-  - `directionMultiplier`: Random 1 or -1 if randomizeDirection is true
+  - `width` (3.0f ± 1.0f): Horizontal size (randomized)
+  - `height` (2.0f ± 0.5f): Vertical size (randomized)
+  - `speed` (1.0f ± 0.3f): Movement speed (randomized)
+  - `randomizeDirection`: Random starting direction
+- **Randomization**:
+  - All dimensions randomized within variation ranges
+  - Can reverse direction randomly
+- **Performance**:
+  - Combines two sine waves
+  - Values pre-calculated on init
 
 #### 6. Oval Movement
+- **Behavior**: Circular or elliptical path
 - **Parameters**:
-  - `minWidth`/`maxWidth` (1.0f/2.5f): Width range of the oval
-  - `minHeight`/`maxHeight` (1.0f/2.5f): Height range of the oval
-  - `minSpeed`/`maxSpeed` (0.6f/1.8f): Movement speed range
-- **Randomization on first use**:
-  - `width`: Random between minWidth and maxWidth
-  - `height`: Random between minHeight and maxHeight
-  - `speed`: Random between minSpeed and maxSpeed
-  - `timeOffset`: Random phase offset
+  - `width` (1.0-2.5f): Horizontal radius (randomized)
+  - `height` (1.0-2.5f): Vertical radius (randomized)
+  - `speed` (0.6-1.8f): Rotation speed (randomized)
+- **Randomization**:
+  - Each axis randomized independently
+  - Random starting angle
+- **Performance**:
+  - Uses efficient sine/cosine
+  - Single calculation per axis
 
 #### 7. Random Jump Movement
+- **Behavior**: Teleports to random positions at intervals
 - **Parameters**:
-  - `minJumpHeight`/`maxJumpHeight` (1.0f/2.5f): Jump height range
-  - `minJumpInterval`/`maxJumpInterval` (0.5f/2.0f): Time between jumps
-  - `randomizeJumpType` (true): If true, randomizes between instant and smooth jumps
-  - `minJumpSpeed`/`maxJumpSpeed` (5.0f/10.0f): Speed of smooth jumps
+  - `jumpHeight` (1.0-2.5f): Vertical range (randomized)
+  - `jumpInterval` (0.5-2.0s): Time between jumps (randomized)
+  - `jumpType`: Instant or smooth transition
+  - `jumpSpeed` (5.0-10.0f): For smooth transitions
 - **Randomization**:
-  - Jump timing: Random between minJumpInterval and maxJumpInterval
-  - Jump height: Random between minJumpHeight and maxJumpHeight
-  - Jump type: Random if randomizeJumpType is true
-  - Jump speed: Random between minJumpSpeed and maxJumpSpeed for smooth jumps
+  - Timing and position randomized
+  - Can randomize between jump types
+- **Performance**:
+  - Minimal calculations between jumps
+  - Smooth transitions use lerp
 
 #### 8. ZigZag Movement
+- **Behavior**: Angular, sharp turns at regular intervals
 - **Parameters**:
-  - `minWidth`/`maxWidth` (1.0f/3.0f): Width of the zigzag pattern
-  - `minFrequency`/`maxFrequency` (0.5f/2.0f): Number of zigzags per second
-  - `minSharpness`/`maxSharpness` (1/5, 1/10): Corner sharpness (1-10)
-  - `smoothCorners` (false): If true, rounds the corners
-- **Randomization on first use**:
-  - `width`: Random between minWidth and maxWidth
-  - `frequency`: Random between minFrequency and maxFrequency
-  - `sharpness`: Random between minSharpness and maxSharpness
+  - `width` (1.0-3.0f): Pattern width (randomized)
+  - `frequency` (0.5-2.0): Turns per second (randomized)
+  - `sharpness` (1-10): Corner angle (randomized)
+  - `smoothCorners`: Round the turns
+- **Randomization**:
+  - All parameters randomized within ranges
+  - Smoothness can be toggled
+- **Performance**:
+  - Uses modulo for pattern repetition
+  - Smoothing adds minimal overhead
 
-### Common Parameters
-All patterns share these common behaviors:
-- `distanceTraveled`: Tracks horizontal movement for consistent speed
-- `startPosition`: Original spawn position of the obstacle
-- `moveSpeed`: Base movement speed from the game controller
-- Y-position is clamped between -6 and 6 to keep obstacles on screen
-
-### Creating Consistent Randomness
-Each pattern uses `timeOffset` to ensure consistent movement:
-- Randomized once when the pattern is first used
-- Ensures identical objects don't move in sync
-- Maintains smooth, predictable movement patterns
-
-### Performance Considerations
-- Patterns are initialized on first use (lazy initialization)
-- Random values are cached to prevent per-frame calculations
-- Complex patterns (like Figure Eight) use efficient math operations
-
-#### 1. Linear Movement
-- **Behavior**: Moves in a straight horizontal line
+### Common Implementation Details
+- **Initialization**: All patterns use lazy initialization for better performance
+- **Randomization**: 
+  - Occurs once on first use
+  - `timeOffset` ensures unique patterns
+- **Bounds**:
+  - Y-position clamped to -6..6
+  - Consistent horizontal speed
+- **Optimizations**:
+  - Minimal allocations
+  - Cached calculations
+  - Efficient math operations
 - **Use Case**: Classic pipe movement, good for beginners
 - **Parameters**: 
   - `moveSpeed`: Speed of movement
