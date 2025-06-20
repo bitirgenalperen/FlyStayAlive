@@ -1,6 +1,6 @@
 # Fly Stay Alive
 
-![Gameplay Video](Readme/gameplay.mov) 
+![Gameplay Video](Readme/gameplay.png) 
 
 ## Game Overview
 "Fly Stay Alive" is a modern take on the classic endless flyer game genre, where players control a bird navigating through dynamically moving obstacles. The game features various movement patterns for pipes, creating an engaging and challenging experience.
