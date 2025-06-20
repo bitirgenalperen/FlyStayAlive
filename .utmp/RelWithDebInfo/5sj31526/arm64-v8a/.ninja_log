@@ -1,0 +1,12 @@
+# ninja log v5
+3	341	1749438585296061361	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	620807ee12f056e5
+342	520	1749438585463652633	/Users/bitirgenalperen/FlyStayAlive/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5sj31526/obj/arm64-v8a/libswappywrapper.so	d751e59061543ecb
+3	1223	1749438586174834944	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	ae68916f8877ec07
+2	1230	1749438586170918563	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	9bb514c9e30e7bac
+1	1256	1749438586208852157	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	bbf82d929f887bbb
+1	1283	1749438586235842902	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	b0656feae96f1536
+1	1373	1749438586326083651	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	ead8f8a90acbccfe
+3	1444	1749438586396881706	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	1dbdd7fdcbdc000d
+2	1532	1749438586484124326	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	fe57c904aa34851a
+0	1621	1749438586573266449	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	7397454e4d1ac3b1
+1621	1748	1749438586700962499	/Users/bitirgenalperen/FlyStayAlive/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5sj31526/obj/arm64-v8a/libgame.so	86283431fa5f809b
