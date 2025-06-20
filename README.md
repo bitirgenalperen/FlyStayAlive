@@ -85,22 +85,116 @@ Assets/
 
 ## Movement Patterns
 
-All movement patterns implement the `IMovementPattern` interface, which defines two key methods:
+All movement patterns implement the `IMovementPattern` interface, which defines two key methods for calculating movement and optional editor visualization.
 
-```csharp
-public interface IMovementPattern
-{
-    // Calculates the next position based on the current state
-    Vector3 CalculateMovement(Vector3 currentPosition, float deltaTime, 
-                             ref float distanceTraveled, 
-                             Vector3 startPosition, float moveSpeed);
-    
-    // Optional method for drawing gizmos in the Unity editor
-    void OnDrawGizmos(Vector3 startPosition, Transform transform);
-}
-```
+### Movement Pattern Parameters and Randomization
 
-### Available Movement Patterns
+Each pattern has specific parameters that control its behavior. Many parameters are randomized within defined ranges when the pattern is first used. Here's a detailed breakdown of each pattern:
+
+#### 1. Linear Movement
+- **Parameters**:
+  - `speedMultiplier` (1.0 by default): Multiplies the base movement speed
+- **Randomization**: None
+- **Behavior**: Moves in a straight horizontal line at constant speed
+
+#### 2. Vertical Movement
+- **Parameters**:
+  - `height` (2.0f): Maximum vertical movement range
+  - `speed` (1.5f): Speed of vertical oscillation
+  - `startMovingUp` (random): Initial direction of movement
+- **Randomization on first use**:
+  - `height`: Random between 1.5 and 2.5
+  - `speed`: Random between 1.0 and 2.0
+  - `startMovingUp`: Randomly true or false
+  - `timeOffset`: Random phase offset for the movement
+
+#### 3. Sine Wave Movement
+- **Parameters**:
+  - `minAmplitude`/`maxAmplitude` (0.5f/2.5f): Wave height range
+  - `minFrequency`/`maxFrequency` (0.5f/2.0f): Oscillation speed range
+  - `minSpeed`/`maxSpeed` (0.8f/2.0f): Horizontal speed range
+- **Randomization on first use**:
+  - `amplitude`: Random between minAmplitude and maxAmplitude
+  - `frequency`: Random between minFrequency and maxFrequency
+  - `speed`: Random between minSpeed and maxSpeed
+  - `timeOffset`: Random phase offset
+
+#### 4. Hover Movement
+- **Parameters**:
+  - `hoverSpacing` (8.0f): Distance between hover points
+  - `hoverDuration` (0.5f): Time spent at each hover point
+  - `moveSpeedMultiplier` (2.5f): Speed when moving between points
+  - `verticalHover` (true): If true, adds vertical movement while hovering
+  - `hoverHeight` (0.3f): Height of vertical hover movement
+- **Randomization**: None
+- **Behavior**: Moves horizontally, pausing at regular intervals
+
+#### 5. Figure Eight Movement
+- **Parameters**:
+  - `width` (3.0f): Base width of the figure-eight
+  - `widthVariation` (1.0f): Random variation in width
+  - `height` (2.0f): Base height of the figure-eight
+  - `heightVariation` (0.5f): Random variation in height
+  - `speed` (1.0f): Base movement speed
+  - `speedVariation` (0.3f): Random speed variation
+  - `randomizeDirection` (true): If true, direction is random
+- **Randomization on first use**:
+  - `randomWidth`: width ± widthVariation
+  - `randomHeight`: height ± heightVariation
+  - `randomSpeedMultiplier`: 1.0 ± speedVariation
+  - `directionMultiplier`: Random 1 or -1 if randomizeDirection is true
+
+#### 6. Oval Movement
+- **Parameters**:
+  - `minWidth`/`maxWidth` (1.0f/2.5f): Width range of the oval
+  - `minHeight`/`maxHeight` (1.0f/2.5f): Height range of the oval
+  - `minSpeed`/`maxSpeed` (0.6f/1.8f): Movement speed range
+- **Randomization on first use**:
+  - `width`: Random between minWidth and maxWidth
+  - `height`: Random between minHeight and maxHeight
+  - `speed`: Random between minSpeed and maxSpeed
+  - `timeOffset`: Random phase offset
+
+#### 7. Random Jump Movement
+- **Parameters**:
+  - `minJumpHeight`/`maxJumpHeight` (1.0f/2.5f): Jump height range
+  - `minJumpInterval`/`maxJumpInterval` (0.5f/2.0f): Time between jumps
+  - `randomizeJumpType` (true): If true, randomizes between instant and smooth jumps
+  - `minJumpSpeed`/`maxJumpSpeed` (5.0f/10.0f): Speed of smooth jumps
+- **Randomization**:
+  - Jump timing: Random between minJumpInterval and maxJumpInterval
+  - Jump height: Random between minJumpHeight and maxJumpHeight
+  - Jump type: Random if randomizeJumpType is true
+  - Jump speed: Random between minJumpSpeed and maxJumpSpeed for smooth jumps
+
+#### 8. ZigZag Movement
+- **Parameters**:
+  - `minWidth`/`maxWidth` (1.0f/3.0f): Width of the zigzag pattern
+  - `minFrequency`/`maxFrequency` (0.5f/2.0f): Number of zigzags per second
+  - `minSharpness`/`maxSharpness` (1/5, 1/10): Corner sharpness (1-10)
+  - `smoothCorners` (false): If true, rounds the corners
+- **Randomization on first use**:
+  - `width`: Random between minWidth and maxWidth
+  - `frequency`: Random between minFrequency and maxFrequency
+  - `sharpness`: Random between minSharpness and maxSharpness
+
+### Common Parameters
+All patterns share these common behaviors:
+- `distanceTraveled`: Tracks horizontal movement for consistent speed
+- `startPosition`: Original spawn position of the obstacle
+- `moveSpeed`: Base movement speed from the game controller
+- Y-position is clamped between -6 and 6 to keep obstacles on screen
+
+### Creating Consistent Randomness
+Each pattern uses `timeOffset` to ensure consistent movement:
+- Randomized once when the pattern is first used
+- Ensures identical objects don't move in sync
+- Maintains smooth, predictable movement patterns
+
+### Performance Considerations
+- Patterns are initialized on first use (lazy initialization)
+- Random values are cached to prevent per-frame calculations
+- Complex patterns (like Figure Eight) use efficient math operations
 
 #### 1. Linear Movement
 - **Behavior**: Moves in a straight horizontal line
@@ -165,12 +259,6 @@ public Vector3 CalculateMovement(Vector3 currentPosition, float deltaTime,
 #### 8. ZigZag Movement
 - **Behavior**: Angular, sharp turns at regular intervals
 - **Use Case**: Fast, unpredictable movement
-- **Visualization**:
-  ```
-  /\    /\    /\
- /  \  /  \  /  \
-/    \/    \/    \
-  ```
 
 ### Creating Custom Movement Patterns
 
