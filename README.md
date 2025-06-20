@@ -1,6 +1,6 @@
 # Fly Stay Alive
 
-![Gameplay Screenshot](Assets/Sprites/gameplay_screenshot.png) <!-- Add a screenshot here -->
+![Gameplay Screenshot](Assets/Sprites/gameplay_screenshot.png) 
 
 ## Game Overview
 "Fly Stay Alive" is a modern take on the classic endless flyer game genre, where players control a bird navigating through dynamically moving obstacles. The game features various movement patterns for pipes, creating an engaging and challenging experience.
@@ -215,55 +215,6 @@ public Vector3 CalculateMovement(Vector3 currentPosition, float deltaTime,
 }
 ```
 
-#### 2. Vertical Movement
-- **Behavior**: Moves up and down while moving horizontally
-- **Use Case**: Adds vertical challenge to the basic movement
-- **Parameters**:
-  - `amplitude`: Height of the vertical movement
-  - `frequency`: Speed of the up/down cycle
-
-#### 3. Sine Wave Movement
-- **Behavior**: Smooth wave-like motion
-- **Use Case**: Creates natural-looking, flowing obstacles
-- **Parameters**:
-  - `amplitude`: Height of the wave
-  - `frequency`: How many complete waves per second
-  - `speed`: Horizontal movement speed
-
-#### 4. Hover Movement
-- **Behavior**: Gentle floating up and down
-- **Use Case**: Subtle movement that's not too challenging
-- **Visualization**:
-  ```
-     ___     ___
-  __/   \___/   \__
-  /                 \
-  ```
-
-#### 5. Figure Eight Movement
-- **Behavior**: Moves in a continuous figure-eight (∞) pattern
-- **Use Case**: Complex movement that requires precise timing
-- **Implementation**: Combines two sine waves at 90° phase shift
-
-#### 6. Oval Movement
-- **Behavior**: Circular or elliptical path
-- **Use Case**: Predictable but challenging circular patterns
-- **Parameters**:
-  - `radiusX`: Horizontal radius
-  - `radiusY`: Vertical radius
-  - `rotationSpeed`: How fast to complete a full circle
-
-#### 7. Random Jump Movement
-- **Behavior**: Teleports to random positions at intervals
-- **Use Case**: Unpredictable, challenging movement
-- **Parameters**:
-  - `jumpInterval`: Time between jumps (in seconds)
-  - `maxVerticalDistance`: Maximum vertical jump distance
-
-#### 8. ZigZag Movement
-- **Behavior**: Angular, sharp turns at regular intervals
-- **Use Case**: Fast, unpredictable movement
-
 ### Creating Custom Movement Patterns
 
 To create a new movement pattern:
@@ -353,13 +304,6 @@ public class CustomMovement : IMovementPattern
 - Different bird characters with unique abilities
 - Online leaderboards
 - Daily challenges
-- More visual effects and animations
-
-## Credits
-- **Developed by**: [Your Name/Team Name]
-- **Art Assets**: [Source of art assets]
-- **Sound Effects**: [Source of sound effects]
-- **Music**: [Source of background music]
 
 ## License
-[Specify your license here, e.g., MIT License]
+MIT License
