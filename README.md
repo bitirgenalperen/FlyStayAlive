@@ -1,6 +1,6 @@
 # Fly Stay Alive
 
-![Gameplay Screenshot](Assets/Sprites/gameplay_screenshot.png) 
+![Gameplay Screenshot](Readme/gameover.png) 
 
 ## Game Overview
 "Fly Stay Alive" is a modern take on the classic endless flyer game genre, where players control a bird navigating through dynamically moving obstacles. The game features various movement patterns for pipes, creating an engaging and challenging experience.
@@ -200,20 +200,7 @@ All movement patterns implement the `IMovementPattern` interface, which defines 
   - Consistent horizontal speed
 - **Optimizations**:
   - Minimal allocations
-  - Cached calculations
   - Efficient math operations
-- **Use Case**: Classic pipe movement, good for beginners
-- **Parameters**: 
-  - `moveSpeed`: Speed of movement
-```csharp
-public Vector3 CalculateMovement(Vector3 currentPosition, float deltaTime, 
-                               ref float distanceTraveled, 
-                               Vector3 startPosition, float moveSpeed)
-{
-    distanceTraveled += moveSpeed * deltaTime;
-    return startPosition + Vector3.left * distanceTraveled;
-}
-```
 
 ### Creating Custom Movement Patterns
 
@@ -281,11 +268,10 @@ public class CustomMovement : IMovementPattern
 - Sound effects for scoring and game over
 
 
-
 ## Getting Started
 
 ### Prerequisites
-- Unity 2021.3 or later
+- Unity 6.1 or later
 - Basic knowledge of Unity and C#
 
 ### Installation
@@ -295,9 +281,8 @@ public class CustomMovement : IMovementPattern
 4. Press Play to start the game
 
 ## Screenshots
-<!-- Add more screenshots as needed -->
-![Main Menu](Assets/Sprites/menu_screenshot.png)
-![Game Over](Assets/Sprites/game_over_screenshot.png)
+![Main Menu](Readme/mainmenu.png)
+![Game Over](Readme/gameover.png)
 
 ## Future Enhancements
 - Power-ups and collectibles
